@@ -143,7 +143,51 @@ namespace StudentExercisesMVC.Controllers
         // GET: Students/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                                    SELECT s.Id,
+                                        s.FirstName,
+                                        s.LastName,
+                                        s.Slack,
+                                        s.CohortId
+                                        FROM Student s
+                                        WHERE Id = @id";
+
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+
+
+                    Student student = null;
+                    if (reader.Read())
+                    {
+                        student = new Student
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            Slack = reader.GetString(reader.GetOrdinal("Slack")),
+                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
+                        };
+
+                        reader.Close();
+
+                        return View(student);
+                    }
+                    else
+                    {
+                        return new StatusCodeResult(StatusCodes.Status404NotFound);
+                    }
+
+
+                }
+            }
         }
 
         // POST: Students/Edit/5
