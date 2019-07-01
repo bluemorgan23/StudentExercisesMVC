@@ -144,50 +144,7 @@ namespace StudentExercisesMVC.Controllers
         public ActionResult Edit(int id)
         {
 
-            using (SqlConnection conn = Connection)
-            {
-                conn.Open();
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"
-                                    SELECT s.Id,
-                                        s.FirstName,
-                                        s.LastName,
-                                        s.Slack,
-                                        s.CohortId
-                                        FROM Student s
-                                        WHERE Id = @id";
-
-                    cmd.Parameters.Add(new SqlParameter("@id", id));
-
-                    SqlDataReader reader = cmd.ExecuteReader();
-
-
-
-                    Student student = null;
-                    if (reader.Read())
-                    {
-                        student = new Student
-                        {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                            Slack = reader.GetString(reader.GetOrdinal("Slack")),
-                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
-                        };
-
-                        reader.Close();
-
-                        return View(student);
-                    }
-                    else
-                    {
-                        return new StatusCodeResult(StatusCodes.Status404NotFound);
-                    }
-
-
-                }
-            }
+            return Details(id);
         }
 
         // POST: Students/Edit/5
@@ -210,7 +167,9 @@ namespace StudentExercisesMVC.Controllers
         // GET: Students/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+
+            return Details(id);
+
         }
 
         // POST: Students/Delete/5
@@ -227,6 +186,24 @@ namespace StudentExercisesMVC.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+        private bool StudentExists(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    // More string interpolation
+                    cmd.CommandText = "SELECT Id FROM Student WHERE Id = @id";
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    return reader.Read();
+                }
             }
         }
     }
