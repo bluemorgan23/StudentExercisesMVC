@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using StudentExercisesMVC.Models;
+using StudentExercisesMVC.Models.ViewModels;
 
 namespace StudentExercisesMVC.Controllers
 {
@@ -137,16 +138,57 @@ namespace StudentExercisesMVC.Controllers
         public ActionResult Edit(int id)
         {
 
+            List<Cohort> cohorts = GetAllCohorts();
+
             Student student = GetStudentById(id);
 
-            return View(student);
+            StudentEditViewModel StudentEditViewModel = new StudentEditViewModel();
+
+            StudentEditViewModel.Student = student;
+
+            StudentEditViewModel.AvailableCohorts = cohorts;
+
+            return View(StudentEditViewModel);
+        }
+
+        private List<Cohort> GetAllCohorts()
+        {
+            using(SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using(SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT Id, CohortName FROM Cohort";
+
+                    List<Cohort> cohorts = new List<Cohort>();
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Cohort cohort = new Cohort
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            CohortName = reader.GetString(reader.GetOrdinal("CohortName"))
+                        };
+
+                        cohorts.Add(cohort);
+                    }
+
+                    reader.Close();
+
+                    return cohorts;
+                }
+            }
         }
 
         // POST: Students/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, Student student)
-        {           
+        public async Task<ActionResult> Edit(int id, StudentEditViewModel viewModel)
+        {
+            Student student = viewModel.Student;
             try
             {
                 // TODO: Add update logic here
@@ -220,8 +262,6 @@ namespace StudentExercisesMVC.Controllers
                         return RedirectToAction(nameof(Index));
                     }
                 }
-
-                
             }
             catch
             {

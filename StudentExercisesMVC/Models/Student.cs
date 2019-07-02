@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data.SqlClient;
 
 namespace StudentExercisesMVC.Models
 {
-    public class Student : NSSPerson 
+    public class Student : NSSPerson
     {
         /*
         public Student(string firstName, string lastName, int id) {
@@ -12,12 +14,16 @@ namespace StudentExercisesMVC.Models
             Id = id;
         }
         */
-        
-        public int Id { get; set; }
-        
-        public List<Exercise> ExerciseList {get; set;} = new List<Exercise>();
 
+        public int Id { get; set; }
+
+        public List<Exercise> ExerciseList { get; set; } = new List<Exercise>();
+
+        [Required]
+        [Display(Name = "Cohort Id")]
         public int CohortId { get; set; }
+
+       
 
 
         public void GetNameAndExercises(Student student)
