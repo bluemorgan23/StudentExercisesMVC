@@ -1,6 +1,6 @@
 using System;
 
-namespace StudentExercisesAPI.Models
+namespace StudentExercisesMVC.Models
 {
     public class Instructor : NSSPerson
     {
