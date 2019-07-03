@@ -136,13 +136,30 @@ namespace StudentExercisesMVC.Controllers
         // POST: Exercises/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Exercise exercise)
         {
             try
             {
                 // TODO: Add update logic here
 
-                return RedirectToAction(nameof(Index));
+                using(SqlConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "UPDATE Exercise SET ExerciseName = @ExerciseName, ExerciseLanguage = @ExerciseLanguage WHERE Id = @id";
+                        cmd.Parameters.Add(new SqlParameter("@ExerciseName", exercise.ExerciseName));
+                        cmd.Parameters.Add(new SqlParameter("@ExerciseLanguage", exercise.ExerciseLanguage));
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+
+                        cmd.ExecuteNonQuery();
+
+                        return RedirectToAction(nameof(Index));
+
+                    }
+                }
+
             }
             catch
             {
