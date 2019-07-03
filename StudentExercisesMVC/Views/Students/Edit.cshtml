@@ -28,7 +28,7 @@
                 <span asp-validation-for="@Model.Student.Slack" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Student.CohortId class="control-label"></label>
+                <label asp-for="@Model.Student.CohortId" class="control-label"></label>
                 <select asp-for="@Model.Student.CohortId" asp-items="@Model.AvailableCohortsSelectList" class="form-control" ></select>
                 <span asp-validation-for="@Model.Student.CohortId" class="text-danger"></span>
             </div>
