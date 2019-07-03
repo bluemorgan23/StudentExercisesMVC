@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,21 +7,6 @@ namespace StudentExercisesMVC.Models
 {
     public class Student : NSSPerson
     {
-
-        //private readonly IConfiguration _config;
-
-        //public Student(IConfiguration config)
-        //{
-        //    _config = config;
-        //}
-
-        //public SqlConnection Connection
-        //{
-        //    get
-        //    {
-        //        return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-        //    }
-        //}
         /*
         public Student(string firstName, string lastName, int id) {
             FirstName = firstName;
@@ -40,6 +24,7 @@ namespace StudentExercisesMVC.Models
         public int CohortId { get; set; }
 
        
+
 
         public void GetNameAndExercises(Student student)
         {
