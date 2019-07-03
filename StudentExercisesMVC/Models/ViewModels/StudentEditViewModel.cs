@@ -11,25 +11,6 @@ namespace StudentExercisesMVC.Models.ViewModels
         public Student Student { get; set; }
         public List<Cohort> AvailableCohorts { get; set; }
 
-        public List<Exercise> AvailableExercises { get; set; }
-
-        public int[] SelectedExercisesIds { get; set; }
-
-        public List<SelectListItem> AvailableExercisesSelectList
-        {
-            get
-            {
-                if(AvailableExercises == null)
-                {
-                    return null;
-                }
-
-                return AvailableExercises
-                        .Select(e => new SelectListItem(e.ExerciseName, e.Id.ToString()))
-                        .ToList();
-            }
-        }
-
         public List<SelectListItem> AvailableCohortsSelectList
         {
             get
