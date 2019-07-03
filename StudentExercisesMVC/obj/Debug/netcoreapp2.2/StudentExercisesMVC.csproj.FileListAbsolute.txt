@@ -35,3 +35,4 @@ C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\De
 C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Students\Delete.g.cshtml.cs
 C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Cohorts\Index.g.cshtml.cs
 C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Cohorts\Details.g.cshtml.cs
+C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Cohorts\Create.g.cshtml.cs
