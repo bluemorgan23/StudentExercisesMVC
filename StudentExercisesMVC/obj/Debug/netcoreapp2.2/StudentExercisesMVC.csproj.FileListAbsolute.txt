@@ -31,5 +31,5 @@ C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\De
 C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Students\Index.g.cshtml.cs
 C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Students\Details.g.cshtml.cs
 C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Students\Edit.g.cshtml.cs
-C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Students\Delete.g.cshtml.cs
 C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Students\Create.g.cshtml.cs
+C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Students\Delete.g.cshtml.cs
