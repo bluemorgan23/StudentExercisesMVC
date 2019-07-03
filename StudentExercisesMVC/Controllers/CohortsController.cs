@@ -209,14 +209,34 @@ namespace StudentExercisesMVC.Controllers
         // POST: Cohorts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Cohort cohort)
         {
             try
             {
                 // TODO: Add update logic here
 
-                return RedirectToAction(nameof(Index));
+                using (SqlConnection conn = Connection)
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"
+                            UPDATE Cohort
+                            SET CohortName = @CohortName
+                            WHERE Id = @id
+                        ";
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        cmd.Parameters.Add(new SqlParameter("@CohortName", cohort.CohortName));
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                }
+
             }
+
             catch
             {
                 return View();
