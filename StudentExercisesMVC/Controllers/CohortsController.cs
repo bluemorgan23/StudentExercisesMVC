@@ -279,6 +279,8 @@ namespace StudentExercisesMVC.Controllers
 
                         cmd.ExecuteNonQuery();
 
+                        conn.Close();
+
                         return RedirectToAction(nameof(Index));
                     }
                 }

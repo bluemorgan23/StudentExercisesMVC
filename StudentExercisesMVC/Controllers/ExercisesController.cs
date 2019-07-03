@@ -183,15 +183,33 @@ namespace StudentExercisesMVC.Controllers
         }
 
         // POST: Exercises/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteConfirmed(int id)
         {
             try
             {
                 // TODO: Add delete logic here
 
-                return RedirectToAction(nameof(Index));
+                using(SqlConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+
+                        cmd.CommandText = "DELETE FROM Exercise WHERE Id = @id";
+
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+
+                        cmd.ExecuteNonQuery();
+
+                        conn.Close();
+
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
             }
             catch
             {
