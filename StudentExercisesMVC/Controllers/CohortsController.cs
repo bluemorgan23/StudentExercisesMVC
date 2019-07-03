@@ -194,7 +194,16 @@ namespace StudentExercisesMVC.Controllers
         // GET: Cohorts/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            try
+            {
+                Cohort cohort = GetCohortById(id);
+
+                return View(cohort);
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         // POST: Cohorts/Edit/5
