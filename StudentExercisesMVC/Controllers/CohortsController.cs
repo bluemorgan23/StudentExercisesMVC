@@ -246,13 +246,22 @@ namespace StudentExercisesMVC.Controllers
         // GET: Cohorts/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            try
+            {
+                Cohort cohort = GetCohortById(id);
+
+                return View(cohort);
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         // POST: Cohorts/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteConfirmed(int id)
         {
             try
             {
