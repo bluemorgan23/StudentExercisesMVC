@@ -35,6 +35,9 @@ namespace StudentExercisesMVC.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
+
+                    
+
                     cmd.CommandText = @"
                                     SELECT s.Id,
                                         s.FirstName,
@@ -88,49 +91,33 @@ namespace StudentExercisesMVC.Controllers
         // GET: Students/Create
         public ActionResult Create()
         {
-            
+            StudentCreateViewModel studentCreateViewModel = new StudentCreateViewModel(_config.GetConnectionString("DefaultConnection"));
 
-            return View();
+            return View(studentCreateViewModel);
         }
 
         // POST: Students/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Student student)
+        public async Task<ActionResult> Create(StudentCreateViewModel model)
         {
-
-
-            try
+            using (SqlConnection conn = Connection)
             {
-                // TODO: Add insert logic here
-
-                using(SqlConnection conn = Connection)
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    conn.Open();
+                    cmd.CommandText = @"INSERT INTO Student
+                ( FirstName, LastName, Slack, CohortId )
+                VALUES
+                ( @firstName, @lastName, @slack, @cohortId )";
+                    cmd.Parameters.Add(new SqlParameter("@firstName", model.student.FirstName));
+                    cmd.Parameters.Add(new SqlParameter("@lastName", model.student.LastName));
+                    cmd.Parameters.Add(new SqlParameter("@slack", model.student.Slack));
+                    cmd.Parameters.Add(new SqlParameter("@cohortId", model.student.CohortId));
+                    await cmd.ExecuteNonQueryAsync();
 
-                    using(SqlCommand cmd = conn.CreateCommand())
-                    {
-                        cmd.CommandText = @"INSERT INTO Student (FirstName, LastName, Slack, CohortId)
-                                            OUTPUT INSERTED.Id
-                                            VALUES (@FirstName, @LastName, @Slack, @CohortId)";
-
-                        cmd.Parameters.Add(new SqlParameter("@FirstName", student.FirstName));
-                        cmd.Parameters.Add(new SqlParameter("@LastName", student.LastName));
-                        cmd.Parameters.Add(new SqlParameter("@Slack", student.Slack));
-                        cmd.Parameters.Add(new SqlParameter("@CohortId", student.CohortId));
-
-
-                        cmd.ExecuteNonQuery();
-
-                        return RedirectToAction(nameof(Index));
-                    }
+                    return RedirectToAction(nameof(Index));
                 }
-
-                
-            }
-            catch
-            {
-                return View();
             }
         }
 

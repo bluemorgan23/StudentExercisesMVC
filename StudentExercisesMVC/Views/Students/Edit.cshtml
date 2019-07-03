@@ -12,18 +12,6 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @*<label asp-for="@Model.AvailableCohorts" class="control-label" for="AvailableCohorts">Available Cohorts</label>
-        <select class="custom-select-sm" name="AvailableCohorts">
-
-                @foreach (var cohort in Model.AvailableCohorts)
-                {
-                    <option>
-                        @Html.DisplayFor(modelItem => cohort.CohortName)
-                        @Html.DisplayFor(modelItem => cohort.CohortName)
-                    </option>
-                }
-
-        </select>*@
             <div class="form-group">
                 <label asp-for="@Model.Student.FirstName" class="control-label"></label>
                 <input asp-for="@Model.Student.FirstName" class="form-control" />
