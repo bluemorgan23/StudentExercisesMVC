@@ -121,7 +121,16 @@ namespace StudentExercisesMVC.Controllers
         // GET: Exercises/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            try
+            {
+                Exercise exercise = GetExerciseById(id);
+
+                return View(exercise);
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         // POST: Exercises/Edit/5
@@ -173,7 +182,8 @@ namespace StudentExercisesMVC.Controllers
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
 
-                    cmd.CommandText = "SELECT e.Id AS ExerciseId, e.ExerciseName, e.ExerciseLanguage FROM Exercise e";
+                    cmd.CommandText = "SELECT e.Id AS ExerciseId, e.ExerciseName, e.ExerciseLanguage FROM Exercise e WHERE Id = @id";
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
 
                     Exercise exercise = null;
 
