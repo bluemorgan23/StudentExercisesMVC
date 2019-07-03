@@ -69,7 +69,16 @@ namespace StudentExercisesMVC.Controllers
         // GET: Exercises/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            try
+            {
+                Exercise exercise = GetExerciseById(id);
+
+                return View(exercise);
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         // GET: Exercises/Create
@@ -138,6 +147,41 @@ namespace StudentExercisesMVC.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+        private Exercise GetExerciseById(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+
+                    cmd.CommandText = "SELECT e.Id AS ExerciseId, e.ExerciseName, e.ExerciseLanguage FROM Exercise e";
+
+                    Exercise exercise = null;
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        exercise = new Exercise
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("ExerciseId")),
+                            ExerciseName = reader.GetString(reader.GetOrdinal("ExerciseName")),
+                            ExerciseLanguage = reader.GetString(reader.GetOrdinal("ExerciseLanguage"))
+                        };
+
+                        
+                    }
+
+                    reader.Close();
+
+                    return exercise;
+
+                }
             }
         }
     }
