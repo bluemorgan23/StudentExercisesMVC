@@ -137,90 +137,15 @@ namespace StudentExercisesMVC.Controllers
         
         public async Task<IActionResult> Details(int Id)
         {
-            using (SqlConnection conn = Connection)
+            try
             {
-                conn.Open();
+                Cohort cohort = GetCohortById(Id);
 
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"SELECT 
-                                        c.Id AS CohortId,
-                                        c.CohortName
-                                        FROM Cohort c
-                                        WHERE c.Id = @Id";
-
-                    //s.Id AS StudentId,
-                    //                    s.FirstName AS SFirst,
-                    //                    s.LastName AS SLast,
-                    //                    i.Id AS InstructorId,
-                    //                    i.FirstName AS IFirst,
-                    //                    i.LastName AS ILast
-                    //                    FROM Cohort c
-                    //                    LEFT JOIN Student s ON s.CohortId = c.Id
-                    //                    LEFT JOIN Instructor i ON i.CohortId = c.Id
-
-                    cmd.Parameters.Add(new SqlParameter("@Id", Id));
-
-                    SqlDataReader reader = await cmd.ExecuteReaderAsync();
-
-                    //List<Instructor> instructors = new List<Instructor>();
-
-                    //List<Student> students = new List<Student>();
-
-                    Cohort cohort = null;
-
-                    if (reader.Read())
-                    {
-                        //Student student = new Student
-                        //{
-                        //    Id = reader.GetInt32(reader.GetOrdinal("StudentId")),
-                        //    FirstName = reader.GetString(reader.GetOrdinal("SFirst")),
-                        //    LastName = reader.GetString(reader.GetOrdinal("SLast")),
-                        //    CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
-                        //};
-
-
-                        //students.Add(student);
-
-
-
-
-                        //Instructor instructor = new Instructor
-                        //{
-                        //    Id = reader.GetInt32(reader.GetOrdinal("InstructorId")),
-                        //    FirstName = reader.GetString(reader.GetOrdinal("IFirst")),
-                        //    LastName = reader.GetString(reader.GetOrdinal("ILast")),
-                        //    CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
-                        //};
-
-                        //instructors.Add(instructor);
-
-
-                        cohort = new Cohort
-                        {
-                            Id = reader.GetInt32(reader.GetOrdinal("CohortId")),
-                            CohortName = reader.GetString(reader.GetOrdinal("CohortName"))
-                            //ListOfStudents = students.Where(s => s.CohortId == reader.GetInt32(reader.GetOrdinal("CohortId"))).ToList(),
-                            //ListOfInstructors = instructors.Where(i => i.CohortId == reader.GetInt32(reader.GetOrdinal("CohortId"))).ToList()
-                        };
-
-
-                        //if (!cohort.ListOfInstructors.Any(i => i.Id == instructor.Id))
-                        //{
-                        //    cohort.ListOfInstructors.Add(instructor);
-                        //}
-
-                        //if (!cohort.ListOfStudents.Any(s => s.Id == student.Id))
-                        //{
-                        //    cohort.ListOfStudents.Add(student);
-                        //}                   
-
-                    }
-
-                    reader.Close();
-
-                    return View(cohort);
-                }
+                return View(cohort);
+            }
+            catch
+            {
+                return NotFound();
             }
 
 
@@ -292,6 +217,95 @@ namespace StudentExercisesMVC.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+        private Cohort GetCohortById(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT 
+                                        c.Id AS CohortId,
+                                        c.CohortName
+                                        FROM Cohort c
+                                        WHERE c.Id = @Id";
+
+                    //s.Id AS StudentId,
+                    //                    s.FirstName AS SFirst,
+                    //                    s.LastName AS SLast,
+                    //                    i.Id AS InstructorId,
+                    //                    i.FirstName AS IFirst,
+                    //                    i.LastName AS ILast
+                    //                    FROM Cohort c
+                    //                    LEFT JOIN Student s ON s.CohortId = c.Id
+                    //                    LEFT JOIN Instructor i ON i.CohortId = c.Id
+
+                    cmd.Parameters.Add(new SqlParameter("@Id", id));
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    //List<Instructor> instructors = new List<Instructor>();
+
+                    //List<Student> students = new List<Student>();
+
+                    Cohort cohort = null;
+
+                    if (reader.Read())
+                    {
+                        //Student student = new Student
+                        //{
+                        //    Id = reader.GetInt32(reader.GetOrdinal("StudentId")),
+                        //    FirstName = reader.GetString(reader.GetOrdinal("SFirst")),
+                        //    LastName = reader.GetString(reader.GetOrdinal("SLast")),
+                        //    CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
+                        //};
+
+
+                        //students.Add(student);
+
+
+
+
+                        //Instructor instructor = new Instructor
+                        //{
+                        //    Id = reader.GetInt32(reader.GetOrdinal("InstructorId")),
+                        //    FirstName = reader.GetString(reader.GetOrdinal("IFirst")),
+                        //    LastName = reader.GetString(reader.GetOrdinal("ILast")),
+                        //    CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
+                        //};
+
+                        //instructors.Add(instructor);
+
+
+                        cohort = new Cohort
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("CohortId")),
+                            CohortName = reader.GetString(reader.GetOrdinal("CohortName"))
+                            //ListOfStudents = students.Where(s => s.CohortId == reader.GetInt32(reader.GetOrdinal("CohortId"))).ToList(),
+                            //ListOfInstructors = instructors.Where(i => i.CohortId == reader.GetInt32(reader.GetOrdinal("CohortId"))).ToList()
+                        };
+
+
+                        //if (!cohort.ListOfInstructors.Any(i => i.Id == instructor.Id))
+                        //{
+                        //    cohort.ListOfInstructors.Add(instructor);
+                        //}
+
+                        //if (!cohort.ListOfStudents.Any(s => s.Id == student.Id))
+                        //{
+                        //    cohort.ListOfStudents.Add(student);
+                        //}                   
+
+                    }
+
+                    reader.Close();
+
+                    return cohort;
+                }
             }
         }
     }
