@@ -135,11 +135,11 @@ namespace StudentExercisesMVC.Controllers
 
         // GET: Cohorts/Details/5
         
-        public async Task<IActionResult> Details(int Id)
+        public  IActionResult Details(int Id)
         {
             try
             {
-                Cohort cohort = GetCohortById(Id);
+                Cohort cohort =  GetCohortById(Id);
 
                 return View(cohort);
             }
@@ -160,13 +160,30 @@ namespace StudentExercisesMVC.Controllers
         // POST: Cohorts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(Cohort cohort)
         {
             try
             {
                 // TODO: Add insert logic here
 
-                return RedirectToAction(nameof(Index));
+                using (SqlConnection conn = Connection)
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"INSERT INTO Cohort
+                ( CohortName )
+                VALUES
+                ( @CohortName )";
+                        cmd.Parameters.Add(new SqlParameter("@CohortName", cohort.CohortName));
+                        
+                        await cmd.ExecuteNonQueryAsync();
+
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
+                
             }
             catch
             {
