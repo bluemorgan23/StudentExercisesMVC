@@ -90,18 +90,32 @@ namespace StudentExercisesMVC.Controllers
         // POST: Exercises/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(Exercise exercise)
         {
-            try
-            {
+            
                 // TODO: Add insert logic here
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                using(SqlConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+
+                        cmd.CommandText = "INSERT INTO Exercise (ExerciseName, ExerciseLanguage) VALUES (@ExerciseName, @ExerciseLanguage)";
+
+                        cmd.Parameters.Add(new SqlParameter("@ExerciseName", exercise.ExerciseName));
+                        cmd.Parameters.Add(new SqlParameter("@ExerciseLanguage", exercise.ExerciseLanguage));
+
+                        await cmd.ExecuteNonQueryAsync();
+
+                        return RedirectToAction(nameof(Index));
+
+                    }
+                }
+
+            
+            
         }
 
         // GET: Exercises/Edit/5
