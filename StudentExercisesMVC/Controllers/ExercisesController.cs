@@ -170,7 +170,16 @@ namespace StudentExercisesMVC.Controllers
         // GET: Exercises/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            try
+            {
+                Exercise exercise = GetExerciseById(id);
+
+                return View(exercise);
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         // POST: Exercises/Delete/5
