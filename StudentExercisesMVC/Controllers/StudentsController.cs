@@ -129,11 +129,10 @@ namespace StudentExercisesMVC.Controllers
 
             Student student = GetStudentById(id);
 
-            StudentEditViewModel StudentEditViewModel = new StudentEditViewModel();
+            StudentEditViewModel StudentEditViewModel = new StudentEditViewModel(_config.GetConnectionString("DefaultConnection"));
 
-            StudentEditViewModel.Student = student;
-
-            StudentEditViewModel.AvailableCohorts = cohorts;
+            StudentEditViewModel.Student = GetStudentById(id);
+            
 
             return View(StudentEditViewModel);
         }

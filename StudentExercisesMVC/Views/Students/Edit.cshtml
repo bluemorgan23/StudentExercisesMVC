@@ -29,8 +29,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="@Model.Student.CohortId" class="control-label"></label>
-                <select asp-for="@Model.Student.CohortId" asp-items="@Model.AvailableCohortsSelectList" class="form-control" ></select>
+                <select asp-for="@Model.Student.CohortId" asp-items="@Model.Cohorts" class="form-control"></select>
                 <span asp-validation-for="@Model.Student.CohortId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.DropDownListFor(m => m.SelectedValues, Model.Exercises, new { multiple = "true" })
             </div>
             <div class="form-group">
                 <input type="submit" asp-controller="Students" asp-action="Edit" value="Save" class="btn btn-primary" />
