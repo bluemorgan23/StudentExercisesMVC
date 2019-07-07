@@ -15,7 +15,7 @@ namespace StudentExercisesMVC.Models
         */
         public int Id { get; set; }
 
-       // public int CohortId { get; set; }
+        public int CohortId { get; set; }
         
         public string Specialty {get; set;}
       
