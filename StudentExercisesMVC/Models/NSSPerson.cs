@@ -14,6 +14,8 @@ namespace StudentExercisesMVC.Models
         [Required]
         public string Slack { get; set; }
         public Cohort Cohort { get; set; }
+        [Required]
+        public int CohortId {get; set;}
         public string GetFullName()
         {
             return $"{FirstName} {LastName}";
