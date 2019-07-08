@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,11 @@ namespace StudentExercisesMVC.Models.ViewModels
 {
     public class InstructorCreateViewModel
     {
+
+        public string hello()
+        {
+            return "hello";
+        }
 
         private string _connectionString;
 

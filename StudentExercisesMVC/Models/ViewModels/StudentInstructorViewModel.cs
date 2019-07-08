@@ -4,10 +4,14 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
+using System.Buffers;
+
 namespace StudentExercisesMVC.Models.ViewModels
 {
     public class StudentInstructorViewModel
     {
+
+
         public List<Student> Students { get; set; }
         public List<Instructor> Instructors { get; set; }
 

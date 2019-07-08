@@ -12,7 +12,10 @@ namespace StudentExercisesMVC.Controllers
 {
     public class CohortsController : Controller
     {
-
+        public IActionResult Privacy()
+        {
+            return View();
+        }
         private readonly IConfiguration _config;
 
         public CohortsController(IConfiguration config)

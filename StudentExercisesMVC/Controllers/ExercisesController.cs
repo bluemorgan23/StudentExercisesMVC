@@ -13,7 +13,10 @@ namespace StudentExercisesMVC.Controllers
     public class ExercisesController : Controller
     {
 
-       
+        public IActionResult Privacy()
+        {
+            return View();
+        }
         private readonly IConfiguration _config;
 
         public ExercisesController(IConfiguration config)

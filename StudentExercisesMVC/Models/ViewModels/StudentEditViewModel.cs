@@ -121,6 +121,10 @@ namespace StudentExercisesMVC.Models.ViewModels
             }
         }
 
+        private string hi()
+        {
+            return "hi";
+        }
 
     }
 }
