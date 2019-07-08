@@ -129,11 +129,10 @@ namespace StudentExercisesMVC.Controllers
 
             Student student = GetStudentById(id);
 
-            StudentEditViewModel StudentEditViewModel = new StudentEditViewModel();
+            StudentEditViewModel StudentEditViewModel = new StudentEditViewModel(_config.GetConnectionString("DefaultConnection"));
 
-            StudentEditViewModel.Student = student;
-
-            StudentEditViewModel.AvailableCohorts = cohorts;
+            StudentEditViewModel.Student = GetStudentById(id);
+            
 
             return View(StudentEditViewModel);
         }
@@ -170,14 +169,21 @@ namespace StudentExercisesMVC.Controllers
             }
         }
 
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
         // POST: Students/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, StudentEditViewModel viewModel)
         {
-            Student student = viewModel.Student;
-            try
-            {
+            Student student = GetStudentById(id);
+
+            viewModel.Student = student;
+           
+            
                 // TODO: Add update logic here
 
                 using (SqlConnection conn = Connection)
@@ -191,27 +197,42 @@ namespace StudentExercisesMVC.Controllers
                                 LastName = @LastName,
                                 CohortId = @CohortId,
                                 Slack = @Slack
-                            WHERE Id = @id
+                            WHERE Id = @id;
                         ";
+
                         cmd.Parameters.Add(new SqlParameter("@id", id));
                         cmd.Parameters.Add(new SqlParameter("@FirstName", student.FirstName));
                         cmd.Parameters.Add(new SqlParameter("@LastName", student.LastName));
                         cmd.Parameters.Add(new SqlParameter("@CohortId", student.CohortId));
                         cmd.Parameters.Add(new SqlParameter("@Slack", student.Slack));
 
-                        int rowsAffected = await cmd.ExecuteNonQueryAsync();
+                        await cmd.ExecuteNonQueryAsync();
+
+                        if (viewModel.SelectedValues.Count > 0)
+                        {
+                            viewModel.SelectedValues.ForEach(i =>
+                            {
+                                cmd.CommandText = $" INSERT INTO StudentExercise (ExerciseId, StudentId) VALUES (@ExerciseId{i}, @StudentId{id});";
+                                cmd.Parameters.Add(new SqlParameter($"@ExerciseId{i}", i));
+                                if(!cmd.Parameters.Contains($"@StudentId{id}"))
+                                {
+                                    cmd.Parameters.Add(new SqlParameter($"@StudentId{id}", id));
+
+                                }
+
+                               cmd.ExecuteNonQuery();
+                            });
+                                
+                        }
 
                         return RedirectToAction(nameof(Index));
                     }
 
                 }
 
-            }
+            
                           
-            catch
-            {
-                return View();
-            }
+           
         }
 
         // GET: Students/Delete/5
