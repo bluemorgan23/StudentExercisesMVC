@@ -179,7 +179,7 @@ namespace StudentExercisesMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, StudentEditViewModel viewModel)
         {
-            //Student student = GetStudentById(id);
+            
 
             Student student = viewModel.Student;
            
@@ -267,6 +267,8 @@ namespace StudentExercisesMVC.Controllers
                         cmd.Parameters.Add(new SqlParameter("@id", id));
 
                         cmd.ExecuteNonQuery();
+
+                        conn.Close();
 
                         return RedirectToAction(nameof(Index));
                     }
