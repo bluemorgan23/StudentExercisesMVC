@@ -12,13 +12,13 @@ namespace StudentExercisesMVC.Models.ViewModels
         public List<SelectListItem> Cohorts { get; set; }
         public Student student { get; set; }
 
-        private string _connectionStrings;
+        private string _connectionString;
 
         private SqlConnection Connection
         {
             get
             {
-                return new SqlConnection(_connectionStrings);
+                return new SqlConnection(_connectionString);
             }
         }
 
