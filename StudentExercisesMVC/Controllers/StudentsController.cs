@@ -74,16 +74,16 @@ namespace StudentExercisesMVC.Controllers
         public ActionResult Details(int id)
         {
             
-            try
-            {
+            
                 Student student = GetStudentById(id);
 
-                return View(student);
-            }
-            catch
-            {
-                return NotFound();
-            }
+                StudentDetailsViewModel viewModel = new StudentDetailsViewModel(id, _config.GetConnectionString("DefaultConnection"));
+
+                viewModel.Student = student;
+
+                return View(viewModel);
+            
+            
                   
             
         }
