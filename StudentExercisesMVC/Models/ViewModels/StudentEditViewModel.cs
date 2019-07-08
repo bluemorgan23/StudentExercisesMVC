@@ -26,7 +26,7 @@ namespace StudentExercisesMVC.Models.ViewModels
 
         public List<int> SelectedValues { get; set; } = new List<int>();
 
-        public IEnumerable<SelectListItem> Exercises {get; set;}
+        public List<SelectListItem> Exercises {get; set;}
 
         public List<SelectListItem> Cohorts { get; set; }
 
