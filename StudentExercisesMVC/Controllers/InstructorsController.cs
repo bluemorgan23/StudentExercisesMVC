@@ -200,13 +200,36 @@ namespace StudentExercisesMVC.Controllers
         // POST: Instructors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, InstructorEditViewModel viewModel)
         {
+            Instructor instructor = viewModel.Instructor;
             try
             {
                 // TODO: Add update logic here
 
-                return RedirectToAction(nameof(Index));
+                using(SqlConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "UPDATE Instructor SET FirstName = @FirstName, LastName = @LastName, Slack = @Slack, CohortId = @CohortId WHERE Id = @id";
+
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        cmd.Parameters.Add(new SqlParameter("@FirstName", instructor.FirstName));
+                        cmd.Parameters.Add(new SqlParameter("@LastName", instructor.LastName));
+                        cmd.Parameters.Add(new SqlParameter("@Slack", instructor.Slack));
+                        cmd.Parameters.Add(new SqlParameter("@CohortId", instructor.CohortId));
+
+                        cmd.ExecuteNonQuery();
+
+                       
+                    }
+
+                    conn.Close();
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
             catch
             {

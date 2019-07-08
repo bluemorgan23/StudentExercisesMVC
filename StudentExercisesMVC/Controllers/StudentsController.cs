@@ -169,10 +169,6 @@ namespace StudentExercisesMVC.Controllers
             }
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         // POST: Students/Edit/5
         [HttpPost]
