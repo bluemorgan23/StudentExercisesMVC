@@ -179,9 +179,9 @@ namespace StudentExercisesMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, StudentEditViewModel viewModel)
         {
-            Student student = GetStudentById(id);
+            //Student student = GetStudentById(id);
 
-            viewModel.Student = student;
+            Student student = viewModel.Student;
            
             
                 // TODO: Add update logic here
@@ -191,7 +191,7 @@ namespace StudentExercisesMVC.Controllers
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = @"
+                        string sql = @"
                             UPDATE Student
                             SET FirstName = @FirstName,
                                 LastName = @LastName,
@@ -206,13 +206,12 @@ namespace StudentExercisesMVC.Controllers
                         cmd.Parameters.Add(new SqlParameter("@CohortId", student.CohortId));
                         cmd.Parameters.Add(new SqlParameter("@Slack", student.Slack));
 
-                        await cmd.ExecuteNonQueryAsync();
 
                         if (viewModel.SelectedValues.Count > 0)
                         {
                             viewModel.SelectedValues.ForEach(i =>
                             {
-                                cmd.CommandText = $" INSERT INTO StudentExercise (ExerciseId, StudentId) VALUES (@ExerciseId{i}, @StudentId{id});";
+                                sql += $" INSERT INTO StudentExercise (ExerciseId, StudentId) VALUES (@ExerciseId{i}, @StudentId{id});";
                                 cmd.Parameters.Add(new SqlParameter($"@ExerciseId{i}", i));
                                 if(!cmd.Parameters.Contains($"@StudentId{id}"))
                                 {
@@ -220,11 +219,13 @@ namespace StudentExercisesMVC.Controllers
 
                                 }
 
-                               cmd.ExecuteNonQuery();
+                               
                             });
-                                
+                            cmd.CommandText = sql;
+                            await cmd.ExecuteNonQueryAsync();
                         }
 
+                        conn.Close();
                         return RedirectToAction(nameof(Index));
                     }
 
