@@ -47,3 +47,4 @@ C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\De
 C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Instructors\Details.g.cshtml.cs
 C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Instructors\Create.g.cshtml.cs
 C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Instructors\Delete.g.cshtml.cs
+C:\Users\bluem\Documents\projects\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp2.2\Razor\Views\Instructors\Edit.g.cshtml.cs

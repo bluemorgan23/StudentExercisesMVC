@@ -126,21 +126,110 @@ namespace StudentExercisesMVC.Controllers
         }
 
         // GET: Instructors/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            string sql = $@"
+                            SELECT
+                                i.Id,
+                                i.FirstName,
+                                i.LastName,
+                                i.Slack,
+                                i.CohortId
+                            FROM Instructor i
+                            WHERE i.Id = @id
+                            ";
+
+            Instructor instructor = null;
+
+            /*
+                Run the query above and create an instance of Instructor
+                populated with the data it returns
+             */
+
+            using(SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using(SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = sql;
+
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+
+                    SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+                    if(reader.Read())
+                    {
+                        instructor = new Instructor
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            Slack = reader.GetString(reader.GetOrdinal("Slack")),
+                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
+                        };
+                    }
+                    else
+                    {
+                        reader.Close();
+                        return NotFound();
+                    }
+                    /*
+                        Create an instance of your InstructorEditViewModel
+                    */
+
+                    InstructorEditViewModel instructorEditView = new InstructorEditViewModel(_config.GetConnectionString("DefaultConnection"));
+
+                    /*
+                        Assign the instructor you created to the .Instructor
+                        property of your view model
+                    */
+
+                    instructorEditView.Instructor = instructor;
+
+                    reader.Close();
+                    return View(instructorEditView);
+
+                    
+                }
+            }
+
         }
 
         // POST: Instructors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, InstructorEditViewModel viewModel)
         {
+            Instructor instructor = viewModel.Instructor;
             try
             {
                 // TODO: Add update logic here
 
-                return RedirectToAction(nameof(Index));
+                using(SqlConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "UPDATE Instructor SET FirstName = @FirstName, LastName = @LastName, Slack = @Slack, CohortId = @CohortId WHERE Id = @id";
+
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        cmd.Parameters.Add(new SqlParameter("@FirstName", instructor.FirstName));
+                        cmd.Parameters.Add(new SqlParameter("@LastName", instructor.LastName));
+                        cmd.Parameters.Add(new SqlParameter("@Slack", instructor.Slack));
+                        cmd.Parameters.Add(new SqlParameter("@CohortId", instructor.CohortId));
+
+                        cmd.ExecuteNonQuery();
+
+                       
+                    }
+
+                    conn.Close();
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
             catch
             {
